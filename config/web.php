@@ -15,9 +15,9 @@ $config = [
     ],
     'container' => [
         'definitions' => [
-            ContentPageService::class => function() use ($params) {
-                return new ContentPageService($params['perPage']);
-            }
+//            ContentPageService::class => function() use ($params) {
+//                return new ContentPageService($params['perPage']);
+//            }
         ]
     ],
     'components' => [

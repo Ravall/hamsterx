@@ -38,9 +38,30 @@ final class ContentPage
         return new SortedPage(1, new SortBy($field, $dir));
     }
 
+    public function getPageNumber($pageNumber, sortedPage $page)
+    {
+        return new SortedPage(
+            $pageNumber,
+            $page->getSortBy(),
+            new PortionPosition(
+                $this->content[0][$page->getSortBy()->getField()],
+                $this->content[0]['id'],
+                $page->getNumber()
+            )
+        );
+    }
+
     public function getLastPage(SortedPage $page): SortedPage
     {
-        return new SortedPage($this->getTotalPages(),  $page->getSortBy());
+        return new SortedPage(
+            $this->getTotalPages(),
+            $page->getSortBy(),
+            new PortionPosition(
+                $this->content[0][$page->getSortBy()->getField()],
+                $this->content[0]['id'],
+                $page->getNumber()
+            )
+        );
     }
 
     public function getFirstPage(SortedPage $page): SortedPage
@@ -69,7 +90,7 @@ final class ContentPage
      */
     public function getNextPage(SortedPage $page): ?SortedPage
     {
-        return ($page->getNumber() <= $this->getTotalPages())
+        return ($page->getNumber() < $this->getTotalPages())
             ? new SortedPage(
                 $page->getNumber() + 1,
                 $page->getSortBy(),
@@ -92,7 +113,7 @@ final class ContentPage
         $pages = [];
         for (
             $i = $page->getNumber() - 1;
-        ($i > 0 && $i > $page->getNumber() - $deep);
+        ($i > 0 && $i >= $page->getNumber() - $deep);
             $i--
         ) {
             $pages[] = new SortedPage(
@@ -118,7 +139,7 @@ final class ContentPage
         $pages = [];
         for (
             $i = $page->getNumber() + 1;
-            ($i <= $this->getTotalPages() && $i < $page->getNumber() + $deep);
+            ($i <= $this->getTotalPages() && $i <= $page->getNumber() + $deep);
             $i++
         ) {
             $pages[] = new SortedPage(
@@ -131,6 +152,7 @@ final class ContentPage
                 )
             );
         }
+
         return $pages;
     }
 
@@ -142,16 +164,6 @@ final class ContentPage
     public function isFirst(SortedPage $page): bool
     {
         return 1 === $page->getNumber();
-    }
-
-    public function pageMoreThen(SortedPage $page, int $count): bool
-    {
-        return $page->getNumber() > $count;
-    }
-
-    public function pageBeforeLast(SortedPage $page, int $count): bool
-    {
-        return $this->getTotalPages() < $page->getNumber() + $count;
     }
 
     private function getTotalPages(): int

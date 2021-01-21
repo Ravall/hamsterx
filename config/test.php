@@ -18,9 +18,9 @@ return [
     'language' => 'en-US',
     'container' => [
         'definitions' => [
-            ContentPageService::class => function() use ($params) {
-                return new ContentPageService($params['perPage']);
-            }
+//            ContentPageService::class => function() use ($params) {
+//                return new ContentPageService($params['perPage']);
+//            }
         ]
     ],
     'components' => [
@@ -48,5 +48,7 @@ return [
             */
         ],
     ],
-    'params' => $params,
+    'params' => array_merge($params, [
+        'perPage' => 3
+    ])
 ];

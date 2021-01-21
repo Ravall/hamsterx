@@ -66,7 +66,7 @@ $this->title = 'Video Content';
 
     <nav aria-label="...">
         <ul class="pagination">
-            <li class="page-item <?=(!$pageContent->pageMoreThen($sortedPage, 3)) ? 'disabled': ''?>">
+            <li class="page-item">
                 <a class="page-link" href="<?=$pageContent->getFirstPage($sortedPage)->getUrl()?>">First</a>
             </li>
 
@@ -78,22 +78,26 @@ $this->title = 'Video Content';
                 <?php endif; ?>
 
             </li>
-            <?php foreach ($pageContent->getPreviousPages($sortedPage, 3) as $page):?>
+            <?php foreach ($pageContent->getPreviousPages($sortedPage, 2) as $page):?>
                 <li class="page-item"><a class="page-link" href="<?=$page->getUrl();?>"><?=$page->getNumber();?></a></li>
             <?php endforeach;?>
             <li class="page-item active">
                 <a class="page-link" href="#"><?=$sortedPage->getNumber();?> <span class="sr-only">(current)</span></a>
             </li>
-            <?php foreach ($pageContent->getNextPages($sortedPage, 3) as $page):?>
+            <?php foreach ($pageContent->getNextPages($sortedPage, 2) as $page):?>
                 <li class="page-item"><a class="page-link" href="<?=$page->getUrl();?>"><?=$page->getNumber();?></a></li>
             <?php endforeach;?>
 
 
             <li class="page-item <?=($pageContent->isLast($sortedPage)) ? 'disabled': ''?>">
-                <a class="page-link" href="<?=$pageContent->getNextPage($sortedPage)->getUrl()?>">Next</a>
+                <?php if (!$pageContent->isLast($sortedPage)): ?>
+                    <a class="page-link" href="<?=$pageContent->getNextPage($sortedPage)->getUrl()?>">Next</a>
+                <?php else: ?>
+                    <a class="page-link" href="">Next</a>
+                <?php endif ?>
             </li>
 
-            <li class="page-item <?=($pageContent->pageBeforeLast($sortedPage, 3)) ? 'disabled': ''?>">
+            <li class="page-item">
                 <a class="page-link" href="<?=$pageContent->getLastPage($sortedPage)->getUrl()?>">Last</a>
             </li>
         </ul>

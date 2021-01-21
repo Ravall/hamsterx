@@ -25,7 +25,7 @@ final class SortedPage
         $this->portionPosition = $portionPosition;
     }
 
-    public function getPortionPosition(): PortionPosition
+    public function getPortionPosition(): ?PortionPosition
     {
         return $this->portionPosition;
     }
@@ -54,4 +54,5 @@ final class SortedPage
 
         return '/?'.http_build_query($params);
     }
+
 }

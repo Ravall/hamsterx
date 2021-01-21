@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use yii\db\ActiveRecord;
 

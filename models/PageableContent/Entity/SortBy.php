@@ -31,13 +31,6 @@ final class SortBy
         return $this->dir;
     }
 
-    public function getQueryDir(): int
-    {
-        return [
-            DirEnum::ASC()->getValue() => SORT_ASC,
-            DirEnum::DESC()->getValue() => SORT_DESC
-        ][$this->dir->getValue()];
-    }
 
     public function isDesc(string $sortBy): bool
     {
@@ -48,4 +41,5 @@ final class SortBy
     {
         return ($sortBy === $this->sortBy && $this->dir->equals(DirEnum::ASC()));
     }
+
 }

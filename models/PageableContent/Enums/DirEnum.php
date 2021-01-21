@@ -15,4 +15,19 @@ final class DirEnum extends Enum
 {
     private const ASC = 'asc';
     private const DESC = 'desc';
+
+    public function forQuery(): int
+    {
+        return [
+            DirEnum::ASC()->getValue() => SORT_ASC,
+            DirEnum::DESC()->getValue() => SORT_DESC
+        ][$this->getValue()];
+    }
+
+    public function reverse(): self
+    {
+        return (DirEnum::ASC())->equals($this)
+            ? DirEnum::DESC()
+            : DirEnum::ASC();
+    }
 }
