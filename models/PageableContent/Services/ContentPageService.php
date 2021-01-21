@@ -12,7 +12,6 @@ use app\models\PageableContent\Services\Responsibilities\Responsibility;
 use app\models\PageableContent\Services\Responsibilities\StepNextResponsibility;
 use app\models\PageableContent\Services\Responsibilities\StepPrevResponsibility;
 use LogicException;
-use Yii;
 use yii\db\ActiveQuery;
 
 final class ContentPageService
@@ -21,10 +20,6 @@ final class ContentPageService
      * @var array
      */
     private $responsibilities;
-    /**
-     * @var mixed
-     */
-    private $perPage;
 
     public function __construct(
         FirstPageResponsibility $firstPageResponsibility,
@@ -42,8 +37,6 @@ final class ContentPageService
             $jumpBeforeHalfResponsibility,
             $jumpAboveHalfResponsibility
         ];
-
-        $this->perPage = Yii::$app->params['perPage'];
     }
 
     /**
@@ -77,12 +70,6 @@ final class ContentPageService
         }
 
         throw new LogicException('Не найдена Responsibility');
-    }
-
-
-    public function getMaxPage(ActiveQuery $query): int
-    {
-        return (int) ceil($query->count() / $this->perPage);
     }
 }
 

@@ -8,9 +8,10 @@ use app\models\PageableContent\Entity\PortionPosition;
 use app\models\PageableContent\Entity\SortBy;
 use app\models\PageableContent\Entity\SortedPage;
 use app\models\PageableContent\Enums\DirEnum;
-use app\models\PageableContent\Services\ContentPageService;
 use app\models\VideoContent;
+use Yii;
 use yii\base\Model;
+use yii\db\ActiveQuery;
 
 final class TableSortRequest extends Model
 {
@@ -28,19 +29,24 @@ final class TableSortRequest extends Model
     public $position_page;
 
     /**
-     * @var ContentPageService
-     */
-    private $contentPageService;
-    /**
      * @var int
      */
     private $maxPage;
+    /**
+     * @var mixed
+     */
+    private $perPage;
 
-    public function __construct(ContentPageService $contentPageService, $config = [])
+    public function __construct($config = [])
     {
         parent::__construct($config);
-        $this->contentPageService = $contentPageService;
-        $this->maxPage = $this->contentPageService->getMaxPage(VideoContent::find());
+        $this->perPage = Yii::$app->params['perPage'];
+        $this->maxPage = $this->getMaxPage(VideoContent::find());
+    }
+
+    private function getMaxPage(ActiveQuery $query): int
+    {
+        return (int) ceil($query->count() / $this->perPage);
     }
 
     public function rules()
