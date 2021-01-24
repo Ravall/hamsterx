@@ -33,6 +33,9 @@ class VideoTableController extends Controller
     {
         $faker = Factory::create();
 
+        /**
+         * ну да. не быстро. ну да ладно. 
+         */
         for ($i=0; $i<self::COUNT_ROWS; $i++)  {
 
             $content = new VideoContent();

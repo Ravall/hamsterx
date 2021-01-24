@@ -1,9 +1,45 @@
-version: '2'
+version: "3.1"
+
 services:
-  php:
-    image: yiisoftware/yii2-php:7.4-apache
+
+  postgres:
+    image: postgres:9.6-alpine
     volumes:
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      - ./:/app:delegated
+      - ./docker/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_BASE}
     ports:
-      - '8000:80'
+      - "5432:5432"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.2
+
+  webserver:
+    image: nginx:alpine
+    volumes:
+      - ./:/var/www/video
+      - ./docker/nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.3
+
+  php-fpm:
+    build: docker/php-fpm
+    volumes:
+      - ./var/log/nginx:/var/log/nginx
+      - ./:/var/www/video
+      - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.4
+
+networks:
+  testing_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

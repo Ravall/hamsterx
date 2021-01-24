@@ -33,6 +33,12 @@ final class SiteController extends Controller
 
     public function actionIndex()
     {
+        if (!VideoContent::find()->exists()) {
+            return $this->render('errors', [
+                'errors' => ['VideoContent' => ['Таблица пуста. запустите скрипт video-table/generate']]
+            ]);
+        }
+
         $this->actionIndexRequest->load(Yii::$app->request->get(), '');
 
         if (!$this->actionIndexRequest->validate()) {
@@ -40,6 +46,7 @@ final class SiteController extends Controller
                 'errors' => $this->actionIndexRequest->errors
             ]);
         }
+
 
         $sortedPage = $this->actionIndexRequest->getSortedPage();
         $pageContent = $this->contentPageService->getContentPage(VideoContent::find(), $sortedPage);
